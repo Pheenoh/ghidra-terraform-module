@@ -1,0 +1,128 @@
+# Ghidra Terraform Module
+
+This Terraform module will install Ghidra on an AWS EC2 instance.
+
+## Prequisites
+
+- [AWS Account](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/)
+- [Install](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) and [configure](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html) the AWS CLI
+- [Terraform](https://www.terraform.io/downloads)
+
+## Deploying the module
+
+```bash
+# Clone the module down
+git clone https://github.com/zsrtp/ghidra-terraform-module
+cd ghidra-terraform-module
+
+# Initialize and apply Terraform
+terraform init
+terraform apply
+```
+
+# Examples
+
+To use the examples below, create a `terraform.tfvars` file in the directory root and populate it with the values from the example.
+
+## Pre-existing Networking
+
+```
+create_networking = false
+subnet_id         = "subnet-abcdefg1234567890" # replace with existing subnet id
+```
+
+## Change Java Heap Range
+
+```
+init_java_heap_size = 1024
+max_java_heap_size = 2048
+```
+
+## Enable S3 Backup
+
+```
+s3_backup = true
+s3_bucket_name = "MySuperCoolBucket1234" # Optional
+```
+
+## Spot Instances w/ Custom Instance Types
+```
+use_spot = true
+spot_instance_types = ["t3.micro","t3.small"]
+```
+
+
+# General Module Information
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.0 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.25.0 |
+
+## Modules
+
+No modules.
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [aws_iam_instance_profile.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile) | resource |
+| [aws_iam_role.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
+| [aws_launch_template.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/launch_template) | resource |
+| [aws_s3_bucket.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
+| [aws_spot_fleet_request.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/spot_fleet_request) | resource |
+| [aws_subnet.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/subnet) | resource |
+| [aws_vpc.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc) | resource |
+| [aws_ami.amazon-linux-2](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/ami) | data source |
+| [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_subnet.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnet) | data source |
+| [aws_vpc.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/vpc) | data source |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | The AWS region where this infrastructure will be deployed to. | `string` | `"us-east-2"` | no |
+| <a name="input_cidr_block"></a> [cidr\_block](#input\_cidr\_block) | The CIDR range to use for the private network. | `string` | `"10.0.0.0/24"` | no |
+| <a name="input_create_networking"></a> [create\_networking](#input\_create\_networking) | Whether or not to create the networking infrastructure for the instance. If you already have a preexsting VPC for the instance(s) to go in, set this to false. | `bool` | `true` | no |
+| <a name="input_ghidra_install_path"></a> [ghidra\_install\_path](#input\_ghidra\_install\_path) | The filesystem path where the Ghidra server will be installed to. This path should be an absolute path from the filesystem root. | `string` | `"/opt/ghidra/"` | no |
+| <a name="input_ghidra_name"></a> [ghidra\_name](#input\_ghidra\_name) | The name that will be given to the Ghidra instance(s) as a prefix 'ghidra\_name-version | `string` | `"ghidra"` | no |
+| <a name="input_ghidra_repo_path"></a> [ghidra\_repo\_path](#input\_ghidra\_repo\_path) | The filesystem path where any Ghidra repositories will be stored. This path should be an absolute path from the filesystem root. It is recommended to not have this be a subfolder under the Ghidra installation. | `string` | `"/opt/repos/"` | no |
+| <a name="input_ghidra_server_config"></a> [ghidra\_server\_config](#input\_ghidra\_server\_config) | Config for the server. If you're setting any of the server.conf variables, don't set this. | `string` | `null` | no |
+| <a name="input_ghidra_server_log_level"></a> [ghidra\_server\_log\_level](#input\_ghidra\_server\_log\_level) | The log level of the Ghidra server. Should be one of: FATAL, ERROR, WARN, STATUS, INFO, DEBUG. **(server.conf variable)** | `string` | `"INFO"` | no |
+| <a name="input_ghidra_uri"></a> [ghidra\_uri](#input\_ghidra\_uri) | The URI that will be used along with the ghidra\_version as a source endpoint for the Ghidra install files. You probably won't need to change this. | `string` | `"https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_"` | no |
+| <a name="input_ghidra_version"></a> [ghidra\_version](#input\_ghidra\_version) | The version of Ghidra to install. | `string` | `"10.0"` | no |
+| <a name="input_ghidra_version_map"></a> [ghidra\_version\_map](#input\_ghidra\_version\_map) | Map of ghidra versions to release dates to properly look up the release URI. You probably won't need to change this unless a new version of Ghidra comes out. | `map(any)` | <pre>{<br>  "10.0": "20210621",<br>  "10.0.1": "20210708",<br>  "10.0.2": "20210804",<br>  "10.0.3": "20210908",<br>  "10.0.4": "20210928",<br>  "10.1": "20211210",<br>  "10.1.5": "20220726"<br>}</pre> | no |
+| <a name="input_initial_java_heap_size"></a> [initial\_java\_heap\_size](#input\_initial\_java\_heap\_size) | Initial Java Heap Size (in MB). **(server.conf variable)** | `number` | `396` | no |
+| <a name="input_max_java_heap_size"></a> [max\_java\_heap\_size](#input\_max\_java\_heap\_size) | Maximum Java Heap Size (in MB). **(server.conf variable)** | `number` | `768` | no |
+| <a name="input_s3_backup"></a> [s3\_backup](#input\_s3\_backup) | Whether or not to create an S3 backup. | `bool` | `false` | no |
+| <a name="input_s3_bucket_name"></a> [s3\_bucket\_name](#input\_s3\_bucket\_name) | The name of the S3 bucket that will be used for the Ghidra database backups. Since S3 buckets have to be globally unique, it's recommended not to set this and let the module generate it for you. | `string` | `null` | no |
+| <a name="input_spot_instance_types"></a> [spot\_instance\_types](#input\_spot\_instance\_types) | A list of spot instance types to use. | `list(string)` | <pre>[<br>  "t3.medium",<br>  "t3.large"<br>]</pre> | no |
+| <a name="input_subnet_id"></a> [subnet\_id](#input\_subnet\_id) | The ID of the subnet to lookup and place the instance(s) in. Do no set this if create\_networking is true. | `string` | `null` | no |
+| <a name="input_use_spot"></a> [use\_spot](#input\_use\_spot) | Whether or not to host Ghidra on a spot instance. | `bool` | `true` | no |
+| <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | The ID of the VPC to lookup and place the instance(s) in. Do not set this if create\_networking is true. | `string` | `null` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_ghidra_private_ip"></a> [ghidra\_private\_ip](#output\_ghidra\_private\_ip) | The private IP of the Ghidra instance. |
+| <a name="output_ghidra_public_ip"></a> [ghidra\_public\_ip](#output\_ghidra\_public\_ip) | The private IP of the Ghidra instance. |
+| <a name="output_ghidra_uri"></a> [ghidra\_uri](#output\_ghidra\_uri) | The Ghidra download URI. |
+<!-- END_TF_DOCS -->
+
+## To-Do
+
+- Add Terratest
+- Auto upgrade script?
+- Create wrapper module to more easily allow for addional Clouds/VPSs
+- Support for non Linux OSs

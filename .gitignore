@@ -1,0 +1,16 @@
+# MacOS
+.DS_Store
+
+# Infracost
+plan.json
+.infracost/
+
+# Ghidra Artifacts
+*.zip
+
+# TF Module
+.terraform/*
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfvars

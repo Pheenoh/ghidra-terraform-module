@@ -5,11 +5,15 @@ output "ghidra_uri" {
 
 output "ghidra_private_ip" {
   description = "The private IP of the Ghidra instance."
-  value       = aws_launch_template.default.network_interfaces[0].private_ip_address
+  value       = aws_instance.default.private_ip
 }
-
 
 output "ghidra_public_ip" {
   description = "The private IP of the Ghidra instance."
-  value       = aws_launch_template.default.network_interfaces[0].ipv4_addresses
+  value       = aws_instance.default.public_ip
+}
+
+output "ghidra_public_dns_name" {
+  description = "The public DNS name given to the EC2 instance."
+  value       = var.create_dns_record ? aws_route53_record.default[0].fqdn : aws_instance.default.public_dns
 }

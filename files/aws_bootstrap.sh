@@ -3,44 +3,36 @@
 set -e
 
 # Variable mappings from Terraform
-GHIDRA_URI          = ${GHIDRA_URI}
-REPO_PATH           = ${REPO_PATH}
-GHIDRA_FOLDER_NAME  = ${GHIDRA_BASE_FILE}
-GHIDRA_FILE_NAME    = ${GHIDRA_FILE_NAME}
-INSTALL_PATH        = ${INSTALL_PATH}
-INIT_JAVA_HEAP      = ${INIT_JAVA_HEAP}
-MAX_JAVA_HEAP       = ${MAX_JAVA_HEAP}
-LOG_LEVEL           = ${LOG_LEVEL}
+export GHIDRA_URI=${GHIDRA_URI}
+export GHIDRA_FOLDER_NAME=${GHIDRA_BASE_FILE}
+export GHIDRA_FILE_NAME=${GHIDRA_FILE_NAME}
+export INSTALL_PATH=${INSTALL_PATH}
+export JAVA_URI="https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz"
 
-function replaceLine() {
-    sed -i "s/$1.*/$2/" $INSTALL_PATH/server/server.conf
-}
+# Download and install dependencies
+yum install unzip -y
 
-function installGhidra() {
-    # Download and install specified OpenJDK version
-    yum install java-11-openjdk-devel unzip -y
+wget $JAVA_URI
+tar xvf openjdk-11.0.2_linux-x64_bin.tar.gz
+mv jdk-11.0.2 /opt/
+tee /etc/profile.d/jdk.sh <<EOF
+export JAVA_HOME=/opt/jdk-11.0.2
+export PATH=\$PATH:\$JAVA_HOME/bin
+EOF
 
-    # Download and install specified Ghidra version
-    wget $GHIDRA_URI
-    unzip $GHIDRA_FILE_NAME
-    mkdir -p $INSTALL_PATH
-    mv $GHIDRA_FOLDER_NAME/* $INSTALL_PATH
-    rm -rf $GHIDRA_FOLDER_NAME
+. /etc/profile.d/jdk.sh
 
-    # Setup server.conf
-    if [ ${SERVER_CONF} == "default" ]; then
-        # Replace server.conf defaults with TF module variable values
-        replaceLine "ghidra.repositories.dir" "ghidra.repositories.dir=$REPO_PATH"
-        replaceLine "wrapper.java.initmemory" "wrapper.java.initmemory=$INIT_JAVA_HEAP"
-        replaceLine "wrapper.java.maxmemory" "wrapper.java.maxmemory=$MAX_JAVA_HEAP"
-        replaceLine "wrapper.logfile.loglevel" "wrapper.logfile.loglevel=$LOG_LEVEL"
-    else
-        # Replace server.conf with the one that was passed in
-        echo ${SERVER_CONF} > $INSTALL_PATH/server/server.conf
-    fi
+# Download and install specified Ghidra version
+wget $GHIDRA_URI
+unzip $GHIDRA_FILE_NAME
+mkdir -p $INSTALL_PATH
+mv $GHIDRA_FOLDER_NAME/* $INSTALL_PATH
+rm -rf $GHIDRA_FOLDER_NAME $GHIDRA_FILE_NAME
 
-    # Setup daemon
-    sh $INSTALL_PATH/server/svrInstall
-}
+# Setup server.conf
+cat $INSTALL_PATH/server/server.conf <<EOF
+${SERVER_CONF}
+EOF
 
-installGhidra()
+# Setup daemon
+sh $INSTALL_PATH/server/svrInstall

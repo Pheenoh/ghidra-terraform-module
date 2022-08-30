@@ -82,6 +82,12 @@ variable "ghidra_server_log_level" {
 }
 
 # EC2 variables
+variable "instance_type" {
+  type        = string
+  description = "The EC2 instance type to use."
+  default     = "t3.micro"
+}
+
 variable "use_spot" {
   type        = bool
   description = "Whether or not to host Ghidra on a spot instance."
@@ -130,4 +136,34 @@ variable "subnet_id" {
   type        = string
   description = "The ID of the subnet to lookup and place the instance(s) in. Do no set this if create_networking is true."
   default     = null
+}
+
+# DNS Variables
+variable "create_dns_record" {
+  type        = bool
+  description = "Whether or not to create a dedicated DNS record for the server. If you have a pre-existing Route53 zone in your AWS account, you can set this to true to create a dedicated record on it."
+  default     = false
+}
+
+variable "dns_zone_name" {
+  type        = string
+  description = "The DNS zone to lookup in the account to provision the DNS record on."
+  default     = "replaceme"
+
+  validation {
+    condition     = var.dns_zone_name != "replaceme"
+    error_message = "You need to replace `dns_zone_name` with the name of your actual zone."
+  }
+}
+
+variable "dns_record_name" {
+  type        = string
+  description = "The name of the DNS record to create on the zone looked up by `dns_zone_name`."
+  default     = "ghidra"
+}
+
+variable "dns_record_ttl" {
+  type        = number
+  description = "The time-to-live for the DNS record"
+  default     = 60
 }

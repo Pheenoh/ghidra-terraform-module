@@ -3,7 +3,6 @@ data "aws_caller_identity" "current" {}
 
 # IAM role for the instance profile
 resource "aws_iam_role" "ec2-role" {
-  count = !var.use_spot ? 1 : 0
   name  = "${local.ghidra_instance_name}-role"
   path  = "/"
 

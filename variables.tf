@@ -88,18 +88,6 @@ variable "instance_type" {
   default     = "t3.micro"
 }
 
-variable "use_spot" {
-  type        = bool
-  description = "Whether or not to host Ghidra on a spot instance."
-  default     = true
-}
-
-variable "spot_instance_types" {
-  type        = list(string)
-  description = "A list of spot instance types to use."
-  default     = ["t3.medium", "t3.large"]
-}
-
 # S3 variables
 variable "s3_backup" {
   type        = bool

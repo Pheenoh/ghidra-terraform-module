@@ -9,7 +9,7 @@ resource "aws_route53_record" "default" {
   count   = var.create_dns_record ? 1 : 0
   zone_id = data.aws_route53_zone.default[0].id
   name    = var.dns_record_name
-  type    = "CNAME"
+  type    = "A"
   ttl     = var.dns_record_ttl
-  records = [aws_instance.default.public_dns]
+  records = [aws_eip.default.public_ip]
 }

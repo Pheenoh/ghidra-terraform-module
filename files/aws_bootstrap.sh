@@ -7,16 +7,16 @@ export GHIDRA_URI=${GHIDRA_URI}
 export GHIDRA_FOLDER_NAME=${GHIDRA_BASE_FILE}
 export GHIDRA_FILE_NAME=${GHIDRA_FILE_NAME}
 export INSTALL_PATH=${INSTALL_PATH}
-export JAVA_URI="https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz"
 
 # Download and install dependencies
 yum install unzip -y
 
-wget $JAVA_URI
-tar xvf openjdk-11.0.2_linux-x64_bin.tar.gz
-mv jdk-11.0.2 /opt/
+wget https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.tar.gz
+tar xvf $(ls *.tar.gz)
+export JAVA_DIR=$(ls -d amazon-corretto-*/)
+mv $JAVA_DIR /opt/
 tee /etc/profile.d/jdk.sh <<EOF
-export JAVA_HOME=/opt/jdk-11.0.2
+export JAVA_HOME=/opt/$JAVA_DIR
 export PATH=\$PATH:\$JAVA_HOME/bin
 EOF
 
@@ -30,7 +30,7 @@ mv $GHIDRA_FOLDER_NAME/* $INSTALL_PATH
 rm -rf $GHIDRA_FOLDER_NAME $GHIDRA_FILE_NAME
 
 # Setup server.conf
-cat $INSTALL_PATH/server/server.conf <<EOF
+cat >$INSTALL_PATH/server/server.conf <<EOF
 ${SERVER_CONF}
 EOF
 

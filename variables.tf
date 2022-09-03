@@ -48,7 +48,7 @@ variable "ghidra_install_path" {
 variable "ghidra_repo_path" {
   type        = string
   description = "The filesystem path where any Ghidra repositories will be stored. This path should be an absolute path from the filesystem root. It is recommended to not have this be a subfolder under the Ghidra installation."
-  default     = "/opt/repos/"
+  default     = "/mnt/repos/"
 }
 
 variable "ghidra_server_config" {
@@ -86,6 +86,24 @@ variable "instance_type" {
   type        = string
   description = "The EC2 instance type to use."
   default     = "t3.micro"
+}
+
+variable "repo_volume_type" {
+  type        = string
+  description = "The EBS volume type that will house your Ghidra repos."
+  default     = "gp2"
+}
+
+variable "repo_volume_size" {
+  type        = number
+  description = "The size (in GBs) of the EBS volume that will house your Ghidra repos."
+  default     = 30
+}
+
+variable "repo_device_name" {
+  type        = string
+  description = "The name given to the repo EBS volume in Linux."
+  default     = "/dev/sdb"
 }
 
 # S3 variables

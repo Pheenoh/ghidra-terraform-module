@@ -1,16 +1,4 @@
-### Global module variables
-variable "platform" {
-  type        = string
-  description = "The provider you're deploying to. Should be one of: aws."
-  default     = "aws"
-
-  validation {
-    condition     = lower(var.platform) == "aws"
-    error_message = "The provider you supplied is wrong. Should be one of: aws."
-  }
-}
-
-### AWS variables
+# AWS variables
 variable "aws_region" {
   type        = string
   description = "The AWS region where this infrastructure will be deployed to."

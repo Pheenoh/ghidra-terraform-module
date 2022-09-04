@@ -22,28 +22,7 @@ terraform apply
 
 # Examples
 
-To use the examples below, create a `terraform.tfvars` file in the directory root and populate it with the values from the example.
-
-## Pre-existing Networking
-
-```
-create_networking = false
-subnet_id         = "subnet-abcdefg1234567890" # replace with existing subnet id
-```
-
-## Change Java Heap Range
-
-```
-init_java_heap_size = 1024
-max_java_heap_size = 2048
-```
-
-## Enable S3 Backup
-
-```
-s3_backup = true
-s3_bucket_name = "MySuperCoolBucket1234" # Optional
-```
+See [here](./examples/aws/README.md) for examples. To use them, reate a `terraform.tfvars` file in the directory root first before running `terraform init` and `terraform apply`.
 
 
 # General Module Information
@@ -131,7 +110,6 @@ No modules.
 
 ## To-Do
 
+- Spot instance support
 - Add Terratest
-- Add examples
-- Create wrapper module to more easily allow for addional Clouds/VPSs
 - Support for Windows OSs (add windows bootstrap script and ami lookup)

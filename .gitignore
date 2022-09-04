@@ -9,8 +9,9 @@ plan.json
 *.zip
 
 # TF Module
-.terraform/*
+.terraform/
 .terraform.lock.hcl
 terraform.tfstate
 terraform.tfstate.backup
 terraform.tfvars
+!examples/**/*.tfvars

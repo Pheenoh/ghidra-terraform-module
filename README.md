@@ -1,12 +1,20 @@
 # Ghidra Terraform Module
 
-This Terraform module will install Ghidra on an AWS EC2 instance.
+This Terraform module will install Ghidra on an AWS EC2 instance or Linode instance.
 
 ## Prequisites
 
+### General 
+- [Terraform](https://www.terraform.io/downloads)
+
+### AWS
 - [AWS Account](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/)
 - [Install](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) and [configure](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html) the AWS CLI
-- [Terraform](https://www.terraform.io/downloads)
+
+### Linode
+- [Linode Account](https://login.linode.com/signup)
+- [Linode CLI](https://www.linode.com/docs/products/tools/cli/get-started/)
+
 
 ## Deploying the module
 
@@ -110,6 +118,14 @@ No modules.
 
 ## To-Do
 
-- Spot instance support
-- Add Terratest
-- Support for Windows OSs (add windows bootstrap script and ami lookup)
+- All Platforms
+    - Mount repo dir on boot (linux)
+    - Ghidra extensions support
+    - Add Terratest
+    - Support for Windows (bootstrap script and image support)
+- AWS
+    - Spot instance support
+    - Block device backup support
+- Linode
+    - DNS Support
+    - Block device backup support

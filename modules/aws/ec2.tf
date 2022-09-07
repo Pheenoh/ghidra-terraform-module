@@ -35,15 +35,16 @@ resource "aws_instance" "default" {
   iam_instance_profile   = aws_iam_instance_profile.default.id
   vpc_security_group_ids = [aws_security_group.default.id]
 
-  user_data = base64encode(templatefile("${path.module}/files/aws_bootstrap.sh",
+  user_data = base64encode(templatefile("${path.module}/../../files/linux_bootstrap.sh",
     {
-      GHIDRA_URI       = local.download_uri,
-      INSTALL_PATH     = var.ghidra_install_path,
-      SERVER_CONF      = local.server_conf,
-      GHIDRA_BASE_FILE = local.ghidra_base_file,
-      GHIDRA_FILE_NAME = local.ghidra_file_name,
+      GHIDRA_URI       = local.download_uri
+      INSTALL_PATH     = var.ghidra_install_path
+      SERVER_CONF      = local.server_conf
+      GHIDRA_BASE_FILE = local.ghidra_base_file
+      GHIDRA_FILE_NAME = local.ghidra_file_name
       REPO_PATH        = var.ghidra_repo_path
-      EBS_DEV_NAME     = var.repo_device_name
+      BLOCK_DEV_NAME   = var.repo_device_name
+      PLATFORM         = "aws"
     }
   ))
   user_data_replace_on_change = true

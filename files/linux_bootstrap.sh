@@ -8,10 +8,11 @@ export GHIDRA_FOLDER_NAME=${GHIDRA_BASE_FILE}
 export GHIDRA_FILE_NAME=${GHIDRA_FILE_NAME}
 export INSTALL_PATH=${INSTALL_PATH}
 export REPO_PATH=${REPO_PATH}
-export EBS_DEV_NAME=${EBS_DEV_NAME}
+export BLOCK_DEV_NAME=${BLOCK_DEV_NAME}
+export PLATFORM=${PLATFORM}
 
 # Download and install dependencies
-yum install unzip -y
+yum install unzip wget tar -y
 wget https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.tar.gz
 tar xvf $(ls *.tar.gz)
 export JAVA_DIR=$(ls -d amazon-corretto-*/)
@@ -39,13 +40,31 @@ EOF
 mkdir -p $REPO_PATH
 
 # Check & format the block device with a filesystem (might be a better way to do this...)
-FS_VAL=$(lsblk -f $EBS_DEV_NAME | awk '{print $2}')
+FS_VAL=$(lsblk -f $BLOCK_DEV_NAME | awk '{print $2}')
 if [[ ! "$FS_VAL" == *"ext4"* ]]; then 
-    mkfs.ext4 $EBS_DEV_NAME
+    mkfs.ext4 $BLOCK_DEV_NAME
 fi
 
-# Mount the device
-mount $EBS_DEV_NAME $REPO_PATH
+# Mount the device (need to add mount on boot here too later)
+mount $BLOCK_DEV_NAME $REPO_PATH
 
-# Setup daemon
-sh $INSTALL_PATH/server/svrInstall
+# Install and run Ghidra
+if [[ $PLATFORM == "aws" ]]; then
+    sh $INSTALL_PATH/server/svrInstall
+else
+    # Setup fw rules
+    firewall-cmd --add-port=13100-13102/tcp --permanent
+
+    # Setup systemd unit file
+    cat >/etc/systemd/system/ghidra <<EOF
+[Unit]
+Description=Ghidra collaboration server
+
+[Service]
+ExecStart=$INSTALL_PATH/server/ghidraSvr console
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+fi

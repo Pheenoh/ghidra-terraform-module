@@ -119,9 +119,8 @@ No modules.
 ## To-Do
 
 - All Platforms
-    - Mount repo dir on boot (linux)
     - Ghidra extensions support
-    - Add Terratest
+    - Add more Terratest cases
     - Support for Windows (bootstrap script and image support)
 - AWS
     - Spot instance support

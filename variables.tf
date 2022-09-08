@@ -209,8 +209,8 @@ variable "linode_root_password" {
 }
 
 variable "linode_token" {
-  type = string
+  type        = string
   description = "API token to connect to your Linode tenant."
-  sensitive = true
-  default = "replaceme"
+  sensitive   = true
+  default     = "replaceme"
 }

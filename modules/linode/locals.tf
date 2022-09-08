@@ -12,6 +12,6 @@ locals {
     java_max_memory    = var.max_java_heap_size,
     repo_dir           = var.ghidra_repo_path,
     log_file_log_level = var.ghidra_server_log_level,
-    ghidra_public_ip   = "0.0.0.0" # fix later
+    ghidra_public_ip   = linode_instance.default.ip_address
   })
 }

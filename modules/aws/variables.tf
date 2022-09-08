@@ -42,7 +42,7 @@ variable "ghidra_uri" {
 variable "ghidra_install_path" {
   type        = string
   description = "The filesystem path where the Ghidra server will be installed to. This path should be an absolute path from the filesystem root."
-  default     = "/opt/ghidra/"
+  default     = "/opt/ghidra"
 }
 
 variable "ghidra_repo_path" {

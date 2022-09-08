@@ -17,18 +17,16 @@ wget https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.tar.
 tar xvf $(ls *.tar.gz)
 export JAVA_DIR=$(ls -d amazon-corretto-*/)
 mv $JAVA_DIR /opt/
-tee /etc/profile.d/jdk.sh <<EOF
+cat >>/etc/profile <<EOF
 export JAVA_HOME=/opt/$JAVA_DIR
 export PATH=\$PATH:\$JAVA_HOME/bin
 EOF
-
-. /etc/profile.d/jdk.sh
 
 # Download and install specified Ghidra version
 wget $GHIDRA_URI
 unzip $GHIDRA_FILE_NAME
 mkdir -p $INSTALL_PATH
-mv $GHIDRA_FOLDER_NAME/* $INSTALL_PATH
+mv $GHIDRA_FOLDER_NAME/* $INSTALL_PATH/
 rm -rf $GHIDRA_FOLDER_NAME $GHIDRA_FILE_NAME
 
 # Setup server.conf
@@ -54,17 +52,32 @@ if [[ $PLATFORM == "aws" ]]; then
 else
     # Setup fw rules
     firewall-cmd --add-port=13100-13102/tcp --permanent
+    firewall-cmd --reload
+
+    # Startup script
+    cat >$INSTALL_PATH/start_ghidra.sh <<EOF
+#!/bin/sh
+
+. /etc/profile
+
+$INSTALL_PATH/server/ghidraSvr console
+EOF
 
     # Setup systemd unit file
-    cat >/etc/systemd/system/ghidra <<EOF
+    chmod +x $INSTALL_PATH/start_ghidra.sh
+    cat >/etc/systemd/system/ghidra.service <<EOF
 [Unit]
 Description=Ghidra collaboration server
 
 [Service]
-ExecStart=$INSTALL_PATH/server/ghidraSvr console
+ExecStart=$INSTALL_PATH/start_ghidra.sh
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
+# Reload daemons, start Ghidra
+systemctl daemon-reload
+systemctl enable ghidra
+systemctl start ghidra
 fi

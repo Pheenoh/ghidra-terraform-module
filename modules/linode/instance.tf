@@ -26,7 +26,6 @@ resource "linode_instance" "default" {
   label  = local.ghidra_instance_name
   region = var.region
   type   = var.instance_type
-
 }
 
 resource "linode_instance_disk" "default" {

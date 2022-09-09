@@ -58,4 +58,10 @@ resource "linode_instance_config" "boot_config" {
       volume_id = linode_volume.default.id
     }
   }
+
+  lifecycle {
+    replace_triggered_by = [
+      linode_stackscript.default.script
+    ]
+  }
 }

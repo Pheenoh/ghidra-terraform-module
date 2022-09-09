@@ -119,7 +119,6 @@ No modules.
 ## To-Do
 
 - All Platforms
-    - Ghidra extensions support
     - Add more Terratest cases
     - Support for Windows (bootstrap script and image support)
 - AWS

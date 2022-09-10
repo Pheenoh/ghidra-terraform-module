@@ -1,6 +1,6 @@
 # Global
 platform             = "linode"
-linode_token         = "replace_me"
+# linode_token         = "replace_me"
 
 # Linode
 linode_root_password = "Orange122!"

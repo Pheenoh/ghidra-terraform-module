@@ -1,4 +1,8 @@
 # Eventually should split this into disparate jobs
+on:  
+  pull_request:
+    branches:
+      - master
 steps:
   - uses: actions/checkout@v3
   - uses: actions/setup-go@v3

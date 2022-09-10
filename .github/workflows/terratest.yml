@@ -5,6 +5,7 @@ on:
 jobs:
   terratest:
     runs-on: ubuntu-latest
+    environment: Prod
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3

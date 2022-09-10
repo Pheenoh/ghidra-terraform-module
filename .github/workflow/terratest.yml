@@ -1,5 +1,8 @@
 # Eventually should split this into disparate jobs
-on:  
+on:
+  push:
+    branches:
+      - linode
   pull_request:
     branches:
       - master

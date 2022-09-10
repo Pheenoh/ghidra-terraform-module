@@ -22,6 +22,7 @@ export JAVA_HOME=/opt/$JAVA_DIR
 export PATH=\$PATH:\$JAVA_HOME/bin
 EOF
 
+source /etc/profile
 # Download and install specified Ghidra version
 wget $GHIDRA_URI
 unzip $GHIDRA_FILE_NAME

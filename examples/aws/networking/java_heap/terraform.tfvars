@@ -1,3 +1,7 @@
+# Global
+platform   = "aws"
+aws_region = "us-east-2"
+
 # Networking
 create_networking = true
 

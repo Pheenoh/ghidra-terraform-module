@@ -1,20 +1,87 @@
-### Global module variables
+# Global module variables
 variable "platform" {
   type        = string
   description = "The provider you're deploying to. Should be one of: aws."
   default     = "aws"
 
   validation {
-    condition     = lower(var.platform) == "aws"
-    error_message = "The provider you supplied is wrong. Should be one of: aws."
+    condition     = contains(["aws", "linode"], lower(var.platform))
+    error_message = "The provider you supplied is wrong. Should be one of: aws, linode."
   }
 }
 
-### AWS variables
+# AWS module variables
 variable "aws_region" {
   type        = string
   description = "The AWS region where this infrastructure will be deployed to."
   default     = "us-east-2"
+}
+
+variable "aws_volume_type" {
+  type        = string
+  description = "The EBS volume type that will house your Ghidra repos."
+  default     = "gp2"
+}
+
+# S3 variables
+variable "aws_s3_backup" {
+  type        = bool
+  description = "Whether or not to create an S3 backup."
+  default     = false
+}
+
+variable "aws_s3_bucket_name" {
+  type        = string
+  description = "The name of the S3 bucket that will be used for the Ghidra database backups. Since S3 buckets have to be globally unique, it's recommended not to set this and let the module generate it for you."
+  default     = null
+}
+
+variable "aws_create_networking" {
+  type        = bool
+  description = "Whether or not to create the networking infrastructure for the instance. If you already have a preexsting VPC for the instance(s) to go in, set this to false."
+  default     = true
+}
+
+variable "aws_cidr_block" {
+  type        = string
+  description = "The CIDR range to use for the private network."
+  default     = "10.0.0.0/24"
+}
+
+variable "aws_vpc_id" {
+  type        = string
+  description = "The ID of the VPC to lookup and place the instance(s) in. Do not set this if create_networking is true."
+  default     = null
+}
+
+variable "aws_subnet_id" {
+  type        = string
+  description = "The ID of the subnet to lookup and place the instance(s) in. Do no set this if create_networking is true."
+  default     = null
+}
+
+variable "aws_create_dns_record" {
+  type        = bool
+  description = "Whether or not to create a dedicated DNS record for the server. If you have a pre-existing Route53 zone in your AWS account, you can set this to true to create a dedicated record on it."
+  default     = false
+}
+
+variable "aws_dns_zone_name" {
+  type        = string
+  description = "The DNS zone to lookup in the account to provision the DNS record on."
+  default     = "replaceme"
+}
+
+variable "aws_dns_record_name" {
+  type        = string
+  description = "The name of the DNS record to create on the zone looked up by `dns_zone_name`."
+  default     = "ghidra"
+}
+
+variable "aws_dns_record_ttl" {
+  type        = number
+  description = "The time-to-live for the DNS record"
+  default     = 60
 }
 
 # Ghidra variables
@@ -41,6 +108,10 @@ variable "ghidra_version_map" {
     "10.0.3" = "20210908",
     "10.0.4" = "20210928",
     "10.1"   = "20211210",
+    "10.1.1" = "20211221",
+    "10.1.2" = "20220125",
+    "10.1.3" = "20220421",
+    "10.1.4" = "20220519",
     "10.1.5" = "20220726"
   }
 }
@@ -94,94 +165,56 @@ variable "ghidra_server_log_level" {
 }
 
 # EC2 variables
-variable "instance_type" {
+variable "aws_instance_type" {
   type        = string
   description = "The EC2 instance type to use."
   default     = "t3.micro"
 }
 
-variable "repo_volume_type" {
-  type        = string
-  description = "The EBS volume type that will house your Ghidra repos."
-  default     = "gp2"
-}
+
 
 variable "repo_volume_size" {
   type        = number
-  description = "The size (in GBs) of the EBS volume that will house your Ghidra repos."
+  description = "The size (in GBs) of the volume that will house your Ghidra repos."
   default     = 30
 }
 
 variable "repo_device_name" {
   type        = string
-  description = "The name given to the repo EBS volume in Linux."
+  description = "The name given to the repo volume in Linux."
   default     = "/dev/sdb"
 }
 
-# S3 variables
-variable "s3_backup" {
-  type        = bool
-  description = "Whether or not to create an S3 backup."
-  default     = false
-}
-
-variable "s3_bucket_name" {
+# Linode variables
+variable "linode_region" {
   type        = string
-  description = "The name of the S3 bucket that will be used for the Ghidra database backups. Since S3 buckets have to be globally unique, it's recommended not to set this and let the module generate it for you."
-  default     = null
+  description = "The Linode region where this infrastructure will be deployed to."
+  default     = "us-east"
 }
 
-# Networking variables
-variable "create_networking" {
-  type        = bool
-  description = "Whether or not to create the networking infrastructure for the instance. If you already have a preexsting VPC for the instance(s) to go in, set this to false."
-  default     = true
-}
-
-variable "cidr_block" {
+# Linode Instance variables
+variable "linode_instance_type" {
   type        = string
-  description = "The CIDR range to use for the private network."
-  default     = "10.0.0.0/24"
+  description = "The Linode instance type to use."
+  default     = "g6-standard-1"
 }
 
-variable "vpc_id" {
+variable "linode_config_path" {
   type        = string
-  description = "The ID of the VPC to lookup and place the instance(s) in. Do not set this if create_networking is true."
-  default     = null
+  description = "Path to your local linode config file."
+  default     = "~/.config/linode-cli"
 }
 
-variable "subnet_id" {
+variable "linode_root_password" {
   type        = string
-  description = "The ID of the subnet to lookup and place the instance(s) in. Do no set this if create_networking is true."
-  default     = null
-}
-
-# DNS Variables
-variable "create_dns_record" {
-  type        = bool
-  description = "Whether or not to create a dedicated DNS record for the server. If you have a pre-existing Route53 zone in your AWS account, you can set this to true to create a dedicated record on it."
-  default     = false
-}
-
-variable "dns_zone_name" {
-  type        = string
-  description = "The DNS zone to lookup in the account to provision the DNS record on."
+  description = "The root password of the Linode instance."
+  sensitive   = true
   default     = "replaceme"
-
-  validation {
-    condition     = var.dns_zone_name != "replaceme"
-    error_message = "You need to replace `dns_zone_name` with the name of your actual zone."
-  }
 }
 
-variable "dns_record_name" {
+variable "linode_token" {
   type        = string
-  description = "The name of the DNS record to create on the zone looked up by `dns_zone_name`."
-  default     = "ghidra"
-}
-
-variable "dns_record_ttl" {
-  type        = number
-  description = "The time-to-live for the DNS record"
-  default     = 60
+  description = "API token to connect to your Linode tenant."
+  sensitive   = true
+  default     = "replaceme"
 }

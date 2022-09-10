@@ -20,6 +20,16 @@ resource "aws_vpc" "default" {
   }
 }
 
+# IGW for EIP Allocation
+resource "aws_internet_gateway" "gw" {
+  count  = var.create_networking ? 1 : 0
+  vpc_id = aws_vpc.default[0].id
+
+  tags = {
+    Name = "igw"
+  }
+}
+
 # Subnet for networking
 resource "aws_subnet" "default" {
   count      = var.create_networking ? 1 : 0

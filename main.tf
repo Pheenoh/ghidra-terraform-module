@@ -39,5 +39,6 @@ module "linode" {
   ghidra_uri_override = var.ghidra_uri_override
   ghidra_name         = var.ghidra_name
   ghidra_version      = var.ghidra_version
+  java_download_uri          = var.java_download_uri
   root_pass           = var.linode_root_password
 }

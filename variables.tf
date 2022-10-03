@@ -122,6 +122,16 @@ variable "ghidra_uri_override" {
   default     = null
 }
 
+variable "ghidra_zip_file_name" {
+  description = "tmp variable. don't use."
+  default     = null
+}
+
+variable "ghidra_extract_folder_name" {
+  description = "tmp variable. don't use."
+  default     = null
+}
+
 variable "ghidra_uri" {
   type        = string
   description = "The URI that will be used along with the ghidra_version as a source endpoint for the Ghidra install files. You probably won't need to change this."

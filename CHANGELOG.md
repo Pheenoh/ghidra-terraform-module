@@ -6,9 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.0] - 2022-10-02
 ### Added
-- `ghidra_uri_override` variable for installing custom Ghidra versions.
+- `ghidra_uri_override` - variable for installing custom Ghidra versions.
 - `ghidra_extract_folder_name`- tmp variable
 - `ghidra_zip_file_name` - tmp variable
+- `java_download_uri` - variable for specifying the download link for a custom version of Java (should be an installer link)
 
 
 ## [1.0.0] - 2022-09-10

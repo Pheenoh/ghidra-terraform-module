@@ -37,15 +37,15 @@ resource "aws_instance" "default" {
 
   user_data = base64encode(templatefile("${path.module}/../../files/linux_bootstrap.sh",
     {
-      GHIDRA_URI       = local.download_uri
-      INSTALL_PATH     = var.ghidra_install_path
-      SERVER_CONF      = local.server_conf
-      GHIDRA_BASE_FILE = local.ghidra_base_file
-      GHIDRA_FILE_NAME = local.ghidra_file_name
-      REPO_PATH        = var.ghidra_repo_path
-      BLOCK_DEV_NAME   = var.repo_device_name
+      GHIDRA_URI        = local.download_uri
+      INSTALL_PATH      = var.ghidra_install_path
+      SERVER_CONF       = local.server_conf
+      GHIDRA_BASE_FILE  = local.ghidra_base_file
+      GHIDRA_FILE_NAME  = local.ghidra_file_name
+      REPO_PATH         = var.ghidra_repo_path
+      BLOCK_DEV_NAME    = var.repo_device_name
       JAVA_DOWNLOAD_URI = var.java_download_uri
-      PLATFORM         = "aws"
+      PLATFORM          = "aws"
     }
   ))
   user_data_replace_on_change = true

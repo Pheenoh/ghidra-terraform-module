@@ -13,6 +13,7 @@ module "aws" {
   ghidra_server_config    = var.ghidra_server_config
   ghidra_server_log_level = var.ghidra_server_log_level
   ghidra_repo_path        = var.ghidra_repo_path
+  ghidra_uri_override     = var.ghidra_uri_override
   ghidra_uri              = var.ghidra_uri
   ghidra_version          = var.ghidra_version
   ghidra_version_map      = var.ghidra_version_map
@@ -28,11 +29,12 @@ module "aws" {
 }
 
 module "linode" {
-  count          = lower(var.platform) == "linode" ? 1 : 0
-  source         = "./modules/linode"
-  region         = var.linode_region
-  instance_type  = var.linode_instance_type
-  ghidra_name    = var.ghidra_name
-  ghidra_version = var.ghidra_version
-  root_pass      = var.linode_root_password
+  count               = lower(var.platform) == "linode" ? 1 : 0
+  source              = "./modules/linode"
+  region              = var.linode_region
+  instance_type       = var.linode_instance_type
+  ghidra_uri_override = var.ghidra_uri_override
+  ghidra_name         = var.ghidra_name
+  ghidra_version      = var.ghidra_version
+  root_pass           = var.linode_root_password
 }

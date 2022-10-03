@@ -81,6 +81,7 @@ No resources.
 | <a name="input_ghidra_server_config"></a> [ghidra\_server\_config](#input\_ghidra\_server\_config) | Config for the server. If you're setting any of the server.conf variables, don't set this. | `string` | `null` | no |
 | <a name="input_ghidra_server_log_level"></a> [ghidra\_server\_log\_level](#input\_ghidra\_server\_log\_level) | The log level of the Ghidra server. Should be one of: FATAL, ERROR, WARN, STATUS, INFO, DEBUG. **(server.conf variable)** | `string` | `"INFO"` | no |
 | <a name="input_ghidra_uri"></a> [ghidra\_uri](#input\_ghidra\_uri) | The URI that will be used along with the ghidra\_version as a source endpoint for the Ghidra install files. You probably won't need to change this. | `string` | `"https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_"` | no |
+| <a name="input_ghidra_uri_override"></a> [ghidra\_uri\_override](#input\_ghidra\_uri\_override) | Use this to manually specify the download location of a compressed Ghidra archive. Only set this if you need to use a custom version of Ghidra. | `string` | `null` | no |
 | <a name="input_ghidra_version"></a> [ghidra\_version](#input\_ghidra\_version) | The version of Ghidra to install. | `string` | `"10.0"` | no |
 | <a name="input_ghidra_version_map"></a> [ghidra\_version\_map](#input\_ghidra\_version\_map) | Map of ghidra versions to release dates to properly look up the release URI. You probably won't need to change this unless a new version of Ghidra comes out. | `map(any)` | <pre>{<br>  "10.0": "20210621",<br>  "10.0.1": "20210708",<br>  "10.0.2": "20210804",<br>  "10.0.3": "20210908",<br>  "10.0.4": "20210928",<br>  "10.1": "20211210",<br>  "10.1.1": "20211221",<br>  "10.1.2": "20220125",<br>  "10.1.3": "20220421",<br>  "10.1.4": "20220519",<br>  "10.1.5": "20220726"<br>}</pre> | no |
 | <a name="input_initial_java_heap_size"></a> [initial\_java\_heap\_size](#input\_initial\_java\_heap\_size) | Initial Java Heap Size (in MB). **(server.conf variable)** | `number` | `396` | no |
@@ -108,6 +109,8 @@ No resources.
 
 - All Platforms
     - Add more Terratest cases
+    - Bring Ghidra locals block to top level
+    - Auto lookup Ghidra archives using http data source
     - Support for Windows (bootstrap script and image support)
 - AWS
     - Spot instance support

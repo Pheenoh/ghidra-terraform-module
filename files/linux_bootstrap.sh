@@ -10,7 +10,7 @@ export INSTALL_PATH=${INSTALL_PATH}
 export REPO_PATH=${REPO_PATH}
 export BLOCK_DEV_NAME=${BLOCK_DEV_NAME}
 export PLATFORM=${PLATFORM}
-export JAVA_DOWNLOAD_URI=${JAVA_DOWNLOAD_URI}
+export JAVA_DOWNLOAD_URI="${JAVA_DOWNLOAD_URI}"
 
 # Download and install dependencies
 yum install unzip wget tar -y

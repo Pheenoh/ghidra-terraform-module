@@ -16,7 +16,7 @@ export JAVA_DOWNLOAD_URI="${JAVA_DOWNLOAD_URI}"
 yum install unzip wget tar -y
 wget $JAVA_DOWNLOAD_URI
 tar xvf $(ls *.tar.gz)
-export JAVA_DIR=$(ls -d amazon-corretto-*)
+export JAVA_DIR=$(ls -d amazon-*/)
 mv $JAVA_DIR /opt/
 cat >>/etc/profile <<EOF
 export JAVA_HOME=/opt/$JAVA_DIR

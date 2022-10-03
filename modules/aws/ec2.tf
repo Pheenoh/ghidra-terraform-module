@@ -44,6 +44,7 @@ resource "aws_instance" "default" {
       GHIDRA_FILE_NAME = local.ghidra_file_name
       REPO_PATH        = var.ghidra_repo_path
       BLOCK_DEV_NAME   = var.repo_device_name
+      JAVA_DOWNLOAD_URI = var.java_download_uri
       PLATFORM         = "aws"
     }
   ))

@@ -21,6 +21,7 @@ module "aws" {
   ghidra_extract_folder_name = var.ghidra_extract_folder_name
   initial_java_heap_size     = var.initial_java_heap_size
   instance_type              = var.aws_instance_type
+  java_download_uri          = var.java_download_uri
   max_java_heap_size         = var.max_java_heap_size
   repo_volume_size           = var.repo_volume_size
   repo_volume_type           = var.aws_volume_type

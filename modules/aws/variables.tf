@@ -45,12 +45,12 @@ variable "ghidra_uri_override" {
 
 variable "ghidra_zip_file_name" {
   description = "tmp variable. don't use."
-  default = null
+  default     = null
 }
 
 variable "ghidra_extract_folder_name" {
   description = "tmp variable. don't use."
-  default = null
+  default     = null
 }
 
 variable "ghidra_uri" {
@@ -75,6 +75,12 @@ variable "ghidra_server_config" {
   type        = string
   description = "Config for the server. If you're setting any of the server.conf variables, don't set this."
   default     = null
+}
+
+variable "java_download_uri" {
+  type        = string
+  description = "URI of the JAVA installer to download."
+  default     = "https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.tar.gz"
 }
 
 # server.conf variables

@@ -21,6 +21,7 @@ module "aws" {
   ghidra_extract_folder_name = var.ghidra_extract_folder_name
   initial_java_heap_size     = var.initial_java_heap_size
   instance_type              = var.aws_instance_type
+  java_download_uri          = var.java_download_uri
   max_java_heap_size         = var.max_java_heap_size
   repo_volume_size           = var.repo_volume_size
   repo_volume_type           = var.aws_volume_type
@@ -38,5 +39,6 @@ module "linode" {
   ghidra_uri_override = var.ghidra_uri_override
   ghidra_name         = var.ghidra_name
   ghidra_version      = var.ghidra_version
+  java_download_uri          = var.java_download_uri
   root_pass           = var.linode_root_password
 }

@@ -67,6 +67,12 @@ variable "ghidra_server_config" {
   default     = null
 }
 
+variable "java_download_uri" {
+  type        = string
+  description = "URI of the JAVA installer to download."
+  default     = "https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.tar.gz"
+}
+
 # server.conf variables
 variable "initial_java_heap_size" {
   type        = number

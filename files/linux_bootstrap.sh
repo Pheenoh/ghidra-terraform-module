@@ -10,16 +10,17 @@ export INSTALL_PATH=${INSTALL_PATH}
 export REPO_PATH=${REPO_PATH}
 export BLOCK_DEV_NAME=${BLOCK_DEV_NAME}
 export PLATFORM=${PLATFORM}
+export JAVA_DOWNLOAD_URI=${JAVA_DOWNLOAD_URI}
 
 # Download and install dependencies
 yum install unzip wget tar -y
-wget https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.tar.gz
+wget $JAVA_DOWNLOAD_URI
 tar xvf $(ls *.tar.gz)
 export JAVA_DIR=$(ls -d amazon-corretto-*/)
 mv $JAVA_DIR /opt/
 cat >>/etc/profile <<EOF
 export JAVA_HOME=/opt/$JAVA_DIR
-export PATH=\$PATH:\$JAVA_HOME/bin
+export PATH=\$PATH:\$JAVA_HOME\/bin
 EOF
 
 source /etc/profile

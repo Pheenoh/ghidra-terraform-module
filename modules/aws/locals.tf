@@ -4,7 +4,7 @@ locals {
   ghidra_base_file               = join("", ["ghidra_", var.ghidra_version, "_PUBLIC"])
   ghidra_base_file_w_date_string = join("", [local.ghidra_base_file, "_", local.ghidra_version_date])
   ghidra_file_name               = join("", [local.ghidra_base_file_w_date_string, ".zip"])
-  download_uri                   = join("", [var.ghidra_uri, var.ghidra_version, "_build/", local.ghidra_file_name])
+  download_uri                   = var.ghidra_uri_override == null ? join("", [var.ghidra_uri, var.ghidra_version, "_build/", local.ghidra_file_name]) : var.ghidra_uri_override
   ghidra_instance_name           = join("-", [var.ghidra_name, var.ghidra_version])
   s3_bucket_name                 = var.s3_backup ? join("-", ["ghidra-backups", data.aws_caller_identity.current.account_id]) : null
 

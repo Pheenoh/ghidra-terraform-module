@@ -37,6 +37,12 @@ variable "ghidra_version_map" {
   }
 }
 
+variable "ghidra_uri_override" {
+  type        = string
+  description = "Use this to manually specify the download location of a compressed Ghidra archive. Only set this if you need to use a custom version of Ghidra."
+  default     = null
+}
+
 variable "ghidra_uri" {
   type        = string
   description = "The URI that will be used along with the ghidra_version as a source endpoint for the Ghidra install files. You probably won't need to change this."
